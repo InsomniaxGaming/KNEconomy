@@ -5,6 +5,7 @@ import com.kingsnest.kneconomy.economy.Bank;
 public class BankEvent {
 	
 	private Bank bank;
+	private boolean cancel = false;
 	
 	public BankEvent(Bank bank)
 	{
@@ -19,6 +20,16 @@ public class BankEvent {
 	public void setBank(Bank bank)
 	{
 		this.bank = bank;
+	}
+	
+	public boolean getCancelled()
+	{
+		return  cancel;
+	}
+	
+	public void setCancelled(boolean cancel)
+	{
+		this.cancel = cancel;
 	}
 
 }
