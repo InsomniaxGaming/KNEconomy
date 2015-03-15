@@ -22,7 +22,7 @@ public class BankEvent {
 		this.bank = bank;
 	}
 	
-	public boolean getCancelled()
+	public boolean isCancelled()
 	{
 		return  cancel;
 	}
