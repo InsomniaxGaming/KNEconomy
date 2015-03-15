@@ -13,6 +13,9 @@ public class BankAccount {
 	/**
 	 * Retrieve existing bank account if specified uuid correlates to one,
 	 * or make a new empty account.
+	 * 
+	 * @param 	b		the bank this account belongs to
+	 * @param	uuid	the UUID of the account holder
 	 * */
 	public BankAccount(Bank b, UUID uuid)
 	{

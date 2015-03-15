@@ -2,6 +2,8 @@ package com.kingsnest.kneconomy;
 
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
@@ -63,6 +65,13 @@ public class KNEconomy {
     public void serverStopping(FMLServerStoppingEvent event) 
     {
     	config.save();
+    }
+
+    public boolean isOp(EntityPlayer player) {
+        // Check if multiplayer and OP or singleplayer and commands allowed
+        // (cheats)
+        return MinecraftServer.getServer().getConfigurationManager()
+                .func_152596_g(player.getGameProfile());
     }
 
 }

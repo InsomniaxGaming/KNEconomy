@@ -10,6 +10,13 @@ import com.kingsnest.kneconomy.economy.listener.BankTransactionListener;
 
 public class Bank {
 	
+	private static int TOTAL_BANKS = 0;
+	
+	//Bank identifiers
+	/**Bank ID. After a bank has been saved to config, its ID will always be the same.*/
+	private int 	id;
+	private String 	name;
+	
 	/**Listeners for bank events*/
 	private List<BankListener> 	bankListeners;
 	
@@ -20,10 +27,32 @@ public class Bank {
 	
 	public Bank()
 	{
+		id = TOTAL_BANKS++;
+		
 		bankListeners = new ArrayList<BankListener>(); 
 		
 		if(BASIC_LISTENER == null)
 			BASIC_LISTENER = new BasicTransactionListener();
+	}
+	
+	public int getID()
+	{
+		return id;
+	}
+	
+	public void setID(int i)
+	{
+		id = i;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String n)
+	{
+		name = n;
 	}
 	
 	public void registerBankListener(BankListener listener)
