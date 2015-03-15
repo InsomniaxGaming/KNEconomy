@@ -7,8 +7,6 @@ import com.kingsnest.kneconomy.economy.event.BankTransactionEvent;
  * */
 public interface BankTransactionListener {
 	
-	public void onDeposit(BankTransactionEvent e);
-	
-	public void onWithdrawl(BankTransactionEvent e);
+	public void onTransaction(BankTransactionEvent e);
 
 }
