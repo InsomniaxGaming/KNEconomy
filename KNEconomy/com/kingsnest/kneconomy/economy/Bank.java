@@ -12,6 +12,11 @@ public class Bank {
 	
 	private static int TOTAL_BANKS = 0;
 	
+	/**
+	 * The default bank.
+	 * */
+	private static Bank DEFAULT;
+	
 	//Bank identifiers
 	/**Bank ID. After a bank has been saved to config, its ID will always be the same.*/
 	private int 	id;
@@ -53,6 +58,16 @@ public class Bank {
 	public void setName(String n)
 	{
 		name = n;
+	}
+	
+	public static Bank getDefaultBank()
+	{
+		return DEFAULT;
+	}
+	
+	public static void setDefaultBank(Bank b)
+	{
+		DEFAULT = b;
 	}
 	
 	public void registerBankListener(BankListener listener)

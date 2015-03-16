@@ -10,20 +10,21 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 
-public class CommandSetBalance implements ICommand{
+public class CommandGetBalance implements ICommand{
 	
     private KNEconomy 	 myMod       = null;
-    private String       commandName = "setbalance";
-    private String       commandUse  = "/setbalance <player> [bank] <amount> | Set the account balance of the specified player and specified bank.";
+    private String       commandName = "balance";
+    private String       commandUse  = "/balance [bank] [player] | Get the account balance of the specified player and specified bank.";
 
     private List<String> aliases;
     
-    public CommandSetBalance(KNEconomy economy)
+    public CommandGetBalance(KNEconomy economy)
     {
     	myMod = economy;
     	
     	aliases = new ArrayList<String>();
-    	aliases.add("setbalance");
+    	aliases.add("balance");
+    	aliases.add("money");
     }
 
 	@Override
@@ -58,30 +59,19 @@ public class CommandSetBalance implements ICommand{
 		{
 			String player 	= args[0];
 			String bank		= args[1];
-			double balance;
+			int balance;
 			
 			try{
-				balance = Double.parseDouble(args[2]);
+				balance = Integer.parseInt(args[2]);
 			}catch(Exception e)
 			{
 				message = "Invalid balance specified.";
 			}
 		}
-		else if(args.length > 1)
+		else 
 		{
-			String player 	= args[0];
-			double balance;
-			
-			try{
-				balance = Double.parseDouble(args[2]);
-			}catch(Exception e)
-			{
-				message = "Invalid balance specified.";
-			}
-			
+			//TODO get balance of commandsender in default bank.
 		}
-		else
-			message = getCommandUsage(commandSender);
 		
 		if(commandSender instanceof EntityPlayer)
 		{

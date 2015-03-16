@@ -27,7 +27,7 @@ public class KNEconomy {
     public KNEconomy instance;
 
     @SidedProxy(clientSide = "com.kingsnest.kneconomy.ClientProxy", serverSide = "com.kingsnest.kneconomy.CommonProxy")
-    public ClientProxy proxy;
+    public static ClientProxy proxy;
 
     // Config object
     public Configuration         config       = null;
