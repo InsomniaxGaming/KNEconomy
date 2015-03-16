@@ -72,7 +72,7 @@ public class CommandGetBalance implements ICommand{
 		else 
 		{
 			//TODO get balance of commandsender in default bank.
-			message = "Balance: " + Bank.getDefaultBank().getAccount((EntityPlayer)commandSender).getBalance();
+			message = "Balance: " + Bank.getDefaultBank().getAccount(((EntityPlayer)commandSender).getPersistentID()).getBalance();
 		}
 		
 		if(commandSender instanceof EntityPlayer)

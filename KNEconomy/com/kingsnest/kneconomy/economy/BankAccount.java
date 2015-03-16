@@ -2,7 +2,6 @@ package com.kingsnest.kneconomy.economy;
 
 import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 
 import com.kingsnest.kneconomy.KNEconomy;

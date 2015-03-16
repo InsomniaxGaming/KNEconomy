@@ -59,16 +59,16 @@ public class KNEconomy {
 
         // loading the configuration from its file
         CONFIGURATION.load();
+        
+        Bank.initialize(new Bank("Default Bank"));
+        
+    	for(String name : CONFIGURATION.getStringList(CATEGORY_MAIN, "BankNames", new String[0], ""))
+    		Bank.getBanks().add(Bank.getDefaultBank().deserialize(CONFIGURATION, name));
     }
     
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-    	Bank.setDefaultBank(new Bank("Default"));
-    	
-    	for(String name : CONFIGURATION.getStringList(CATEGORY_MAIN, "BankNames", new String[0], ""))
-    		Bank.getBanks().add(Bank.getDefaultBank().deserialize(CONFIGURATION, name));
-    	
     	LOGGER.info("'" + NAME + "' V" + VERSION + " initializing.");
     	
     	MinecraftForge.EVENT_BUS.register(this);

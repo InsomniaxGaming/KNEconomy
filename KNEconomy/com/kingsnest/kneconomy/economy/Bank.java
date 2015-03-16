@@ -1,7 +1,6 @@
 package com.kingsnest.kneconomy.economy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,8 +37,8 @@ public class Bank implements Serializeable<Bank>{
 	/**Listeners for bank events*/
 	private List<BankListener> 	bankListeners;
 	
-	private static BasicTransactionListener BASIC_TRANSACTION_LISTENER;
-	private static BasicCreationListener 	BASIC_CREATION_LISTENER;
+	private BasicTransactionListener basicTransactionListener;
+	private BasicCreationListener 	basicCreationListener;
 	
 	/**Bank accounts of users currently online*/
 	protected List<BankAccount> accounts;
@@ -48,23 +47,22 @@ public class Bank implements Serializeable<Bank>{
 	{
 		bankListeners = new ArrayList<BankListener>(); 
 		accounts = new ArrayList<BankAccount>();
-		
-		if(BANKS == null)
-			BANKS = new ArrayList<Bank>();
-		
-		BANKS.add(this);
-		
-		if(BASIC_TRANSACTION_LISTENER == null)
-			BASIC_TRANSACTION_LISTENER = new BasicTransactionListener();
-		if(BASIC_CREATION_LISTENER == null)
-			BASIC_CREATION_LISTENER = new BasicCreationListener();
+
+		basicTransactionListener = new BasicTransactionListener();
+		basicCreationListener = new BasicCreationListener();
 		
 		TOTAL_BANKS++;
 	}
 	
 	public Bank(String bankName)
 	{
-		super();
+		bankListeners = new ArrayList<BankListener>(); 
+		accounts = new ArrayList<BankAccount>();
+
+		basicTransactionListener = new BasicTransactionListener();
+		basicCreationListener = new BasicCreationListener();
+		
+		TOTAL_BANKS++;
 		
 		id = TOTAL_BANKS;
 		name = bankName;
@@ -100,9 +98,10 @@ public class Bank implements Serializeable<Bank>{
 		initialBalance = balance;
 	}
 	
-	public static void initialize()
+	public static void initialize(Bank defaultBank)
 	{
-		
+		BANKS = new ArrayList<Bank>();
+		Bank.setDefaultBank(defaultBank);
 	}
 	
 	public static Bank getDefaultBank()
@@ -159,6 +158,14 @@ public class Bank implements Serializeable<Bank>{
 		}
 		return null;
 	}
+	
+	/**
+	 * Retrieves the account of the specified user. Only checks online users.
+	 * */
+	public BankAccount getAccount(EntityPlayer player)
+	{
+		return getAccount(player.getPersistentID());
+	}
 
 	/**
 	 * Retrieves the bank account of the specified user, if one exists.
@@ -209,7 +216,7 @@ public class Bank implements Serializeable<Bank>{
 		}
 		
 		//Fire basic listener separately, to ensure it is the final authority.
-		BASIC_TRANSACTION_LISTENER.onTransaction(e);
+		basicTransactionListener.onTransaction(e);
 	}
 	
 	protected void fireAccountCreationEvent(AccountCreationEvent e)
@@ -223,7 +230,7 @@ public class Bank implements Serializeable<Bank>{
 		}
 		
 		//Fire basic listener separately, to ensure it is the final authority.
-		BASIC_CREATION_LISTENER.onAccountCreation(e);
+		basicCreationListener.onAccountCreation(e);
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kingsnest.kneconomy.KNEconomy;
+import com.kingsnest.kneconomy.economy.Bank;
+import com.kingsnest.kneconomy.economy.BankAccount;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -57,11 +59,25 @@ public class CommandSetBalance implements ICommand{
 		if(args.length > 2)
 		{
 			String player 	= args[0];
-			String bank		= args[1];
+			String bankName	= args[1];
 			double balance;
 			
 			try{
 				balance = Double.parseDouble(args[2]);
+				
+				Bank bank = Bank.getBankFromName(bankName);
+				
+				if(bank != null)
+				{
+					BankAccount account = bank.getAccount((EntityPlayer)commandSender);
+					
+					if(account != null)
+						account.setBalance(balance);
+					else
+						message = ((EntityPlayer)commandSender).getDisplayName() + " Does not have an account at " + Bank.getDefaultBank().getName();
+				}
+				else
+					message = bankName + " is not an existing bank.";
 			}catch(Exception e)
 			{
 				message = "Invalid balance specified.";
@@ -69,11 +85,19 @@ public class CommandSetBalance implements ICommand{
 		}
 		else if(args.length > 1)
 		{
+			//Assume default bank.
 			String player 	= args[0];
 			double balance;
 			
 			try{
 				balance = Double.parseDouble(args[1]);
+				
+				BankAccount account = Bank.getDefaultBank().getAccount((EntityPlayer)commandSender);
+				
+				if(account != null)
+					account.setBalance(balance);
+				else
+					message = ((EntityPlayer)commandSender).getDisplayName() + " Does not have an account at " + Bank.getDefaultBank().getName();
 			}catch(Exception e)
 			{
 				message = "Invalid balance specified.";
