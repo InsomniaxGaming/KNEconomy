@@ -32,7 +32,7 @@ public class KNEconomy {
     // Config object
     public Configuration         config       = null;
     
-    private Logger logger = FMLLog.getLogger();
+    public Logger logger = FMLLog.getLogger();
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)

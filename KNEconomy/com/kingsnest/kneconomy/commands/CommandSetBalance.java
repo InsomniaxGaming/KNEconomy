@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kingsnest.kneconomy.KNEconomy;
+import com.sun.media.jfxmedia.logging.Logger;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
 
 public class CommandSetBalance implements ICommand{
 	
@@ -52,10 +54,30 @@ public class CommandSetBalance implements ICommand{
 	@Override
 	public void processCommand(ICommandSender commandSender, String[] args)
 	{
+		String message = "";
 		if(args.length > 2)
 		{
 			String player 	= args[0];
 			String bank		= args[1];
+			int balance;
+			
+			try{
+				balance = Integer.parseInt(args[2]);
+			}catch(Exception e)
+			{
+				message = "Invalid balance specified.";
+			}
+		}
+		
+		if(commandSender instanceof EntityPlayer)
+		{
+			ChatComponentText cmc = new ChatComponentText("");
+			cmc.appendText(message);
+			((EntityPlayer)commandSender).addChatMessage(cmc);
+		}
+		else
+		{
+			myMod.logger.info(message);
 		}
 	}
 
