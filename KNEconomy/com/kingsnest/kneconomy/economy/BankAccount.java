@@ -28,6 +28,8 @@ public class BankAccount implements Serializeable{
 		bank	= b;
 		holder 	= uuid;
 		
+		balance = bank.getInitialBalance();
+		
 		bank.fireAccountCreationEvent(new AccountCreationEvent(bank, this));
 	}
 	
@@ -74,8 +76,8 @@ public class BankAccount implements Serializeable{
 	@Override
 	public void serialize(Configuration config)
 	{
-		config.get(KNEconomy.CATEGORY_ACCOUNT+"."+this.getBank().getName(), this.getHolder().getUniqueID().toString() + ".holder", false).set(this.getHolder().getUniqueID().toString());
-		config.get(KNEconomy.CATEGORY_ACCOUNT+"."+this.getBank().getName(), this.getHolder().getUniqueID().toString() + ".balance", false).set(this.getBalance());
+		config.get(KNEconomy.CATEGORY_ACCOUNT+"."+this.getBank().getName(), this.getHolder().getPersistentID().toString() + ".holder", false).set(this.getHolder().getPersistentID().toString());
+		config.get(KNEconomy.CATEGORY_ACCOUNT+"."+this.getBank().getName(), this.getHolder().getPersistentID().toString() + ".balance", false).set(this.getBalance());
 	}
 
 	@Override
