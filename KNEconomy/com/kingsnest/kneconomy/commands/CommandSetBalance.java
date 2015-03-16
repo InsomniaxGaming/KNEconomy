@@ -73,7 +73,7 @@ public class CommandSetBalance implements ICommand{
 			double balance;
 			
 			try{
-				balance = Double.parseDouble(args[2]);
+				balance = Double.parseDouble(args[1]);
 			}catch(Exception e)
 			{
 				message = "Invalid balance specified.";

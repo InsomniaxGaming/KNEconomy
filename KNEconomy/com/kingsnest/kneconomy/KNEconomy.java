@@ -2,6 +2,9 @@ package com.kingsnest.kneconomy;
 
 import org.apache.logging.log4j.Logger;
 
+import com.kingsnest.kneconomy.commands.CommandGetBalance;
+import com.kingsnest.kneconomy.commands.CommandSetBalance;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
@@ -58,7 +61,8 @@ public class KNEconomy {
     @EventHandler
     public void serverLoad(FMLServerStartingEvent event)
     {
-    	
+    	event.registerServerCommand(new CommandSetBalance(this));
+    	event.registerServerCommand(new CommandGetBalance(this));
     }
 
     @EventHandler

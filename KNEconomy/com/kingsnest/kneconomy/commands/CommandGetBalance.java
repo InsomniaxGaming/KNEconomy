@@ -14,7 +14,7 @@ public class CommandGetBalance implements ICommand{
 	
     private KNEconomy 	 myMod       = null;
     private String       commandName = "balance";
-    private String       commandUse  = "/balance [bank] [player] | Get the account balance of the specified player and specified bank.";
+    private String       commandUse  = "/balance [player] [bank] | Get the account balance of the specified player and specified bank.";
 
     private List<String> aliases;
     
@@ -59,14 +59,14 @@ public class CommandGetBalance implements ICommand{
 		{
 			String player 	= args[0];
 			String bank		= args[1];
-			int balance;
 			
-			try{
-				balance = Integer.parseInt(args[2]);
-			}catch(Exception e)
-			{
-				message = "Invalid balance specified.";
-			}
+			//TODO get balance of specified user from specified bank.
+		}
+		else if(args.length > 1)
+		{
+			String player	= args[0];
+			
+			//TODO get balance of specified player from default bank
 		}
 		else 
 		{
