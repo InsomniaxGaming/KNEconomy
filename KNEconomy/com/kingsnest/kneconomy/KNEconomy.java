@@ -22,9 +22,14 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 @Mod(modid = KNEconomy.MODID, version = KNEconomy.VERSION, name = KNEconomy.NAME)
 public class KNEconomy {
 
-    public static final String   MODID        = "kneconomy";
-    public static final String   VERSION      = "0.0.1 Alpha";
-    public static final String   NAME         = "King's Nest Economy API";
+	//Configuration categories
+	public static final String CATEGORY_MAIN 	= "KNEconomy";
+	public static final String CATEGORY_BANK 	= "KNEconomy.Banks";
+	public static final String CATEGORY_ACCOUNT = "KNEconomy.Accounts";
+
+    public static final String MODID        	= "kneconomy";
+    public static final String VERSION      	= "0.0.1 Alpha";
+    public static final String NAME         	= "King's Nest Economy API";
 
     @Instance(MODID)
     public KNEconomy instance;

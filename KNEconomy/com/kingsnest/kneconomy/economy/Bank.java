@@ -1,14 +1,19 @@
 package com.kingsnest.kneconomy.economy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import net.minecraftforge.common.config.Configuration;
+
+import com.kingsnest.kneconomy.KNEconomy;
+import com.kingsnest.kneconomy.Serializeable;
 import com.kingsnest.kneconomy.economy.event.BankEvent;
 import com.kingsnest.kneconomy.economy.event.BankTransactionEvent;
 import com.kingsnest.kneconomy.economy.listener.BankListener;
 import com.kingsnest.kneconomy.economy.listener.BankTransactionListener;
 
-public class Bank {
+public class Bank implements Serializeable{
 	
 	private static int TOTAL_BANKS = 0;
 	
@@ -125,5 +130,19 @@ public class Bank {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void serialize(Configuration config)
+	{
+		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".id", false).set(this.getID());
+		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".name", false).set(this.getName());
+	}
+
+	@Override
+	public void deserialize(HashMap<String, Object> data)
+	{
+		this.setID((int)data.get("id"));
+		this.setName((String)data.get("name"));
 	}
 }

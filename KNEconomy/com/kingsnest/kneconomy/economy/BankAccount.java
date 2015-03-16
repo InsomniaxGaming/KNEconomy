@@ -1,10 +1,15 @@
 package com.kingsnest.kneconomy.economy;
 
+import java.util.HashMap;
 import java.util.UUID;
 
+import net.minecraftforge.common.config.Configuration;
+
+import com.kingsnest.kneconomy.KNEconomy;
+import com.kingsnest.kneconomy.Serializeable;
 import com.kingsnest.kneconomy.economy.event.BankTransactionEvent;
 
-public class BankAccount {
+public class BankAccount implements Serializeable{
 	
 	private Bank bank;
 	private UUID holder;
@@ -64,6 +69,18 @@ public class BankAccount {
 	public void withdrawl(double amount)
 	{
 		this.bank.fireTransactionEvent(new BankTransactionEvent(bank, this, -amount));
+	}
+
+	@Override
+	public void serialize(Configuration config)
+	{
+		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().toString() + "." + this.getBank().getName() + ".holder", false).set( this.getHolder().toString());
+	}
+
+	@Override
+	public void deserialize(HashMap<String, Object> data)
+	{
+		
 	}
 
 }
