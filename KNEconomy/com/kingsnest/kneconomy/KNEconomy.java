@@ -8,6 +8,7 @@ import com.kingsnest.kneconomy.commands.CommandSetBalance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -68,6 +69,17 @@ public class KNEconomy {
     {
     	event.registerServerCommand(new CommandSetBalance(this));
     	event.registerServerCommand(new CommandGetBalance(this));
+    }
+
+    @EventHandler
+    public void entityJoinWorld(EntityJoinWorldEvent event)
+    {
+        if (event.entity instanceof EntityPlayer)
+        {
+        	//Check if player has an existing bank account.
+            EntityPlayer player = (EntityPlayer) event.entity;
+            
+        }
     }
 
     @EventHandler

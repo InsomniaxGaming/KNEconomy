@@ -74,13 +74,15 @@ public class BankAccount implements Serializeable{
 	@Override
 	public void serialize(Configuration config)
 	{
-		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().toString() + "." + this.getBank().getName() + ".holder", false).set( this.getHolder().toString());
+		config.get(KNEconomy.CATEGORY_ACCOUNT+this.getBank().getName(), this.getHolder().toString() + ".holder", false).set(this.getHolder().toString());
+		config.get(KNEconomy.CATEGORY_ACCOUNT+this.getBank().getName(), this.getHolder().toString() + ".balance", false).set(this.getBalance());
 	}
 
 	@Override
 	public void deserialize(HashMap<String, Object> data)
 	{
-		
+		this.setHolder(UUID.fromString((String)data.get("holder")));
+		this.setBalance((double)data.get("balance"));
 	}
 
 }
