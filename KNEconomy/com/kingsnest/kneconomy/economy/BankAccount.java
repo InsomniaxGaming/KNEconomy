@@ -1,7 +1,5 @@
 package com.kingsnest.kneconomy.economy;
 
-import java.util.HashMap;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 
@@ -10,11 +8,16 @@ import com.kingsnest.kneconomy.Serializeable;
 import com.kingsnest.kneconomy.economy.event.AccountCreationEvent;
 import com.kingsnest.kneconomy.economy.event.BankTransactionEvent;
 
-public class BankAccount implements Serializeable{
+public class BankAccount implements Serializeable<BankAccount>{
 	
 	private Bank bank;
 	private EntityPlayer holder;
 	private double balance;
+	
+	private BankAccount()
+	{	
+		balance = bank.getInitialBalance();
+	}
 	
 	/**
 	 * Retrieve existing bank account if specified uuid correlates to one,
@@ -25,10 +28,10 @@ public class BankAccount implements Serializeable{
 	 * */
 	public BankAccount(Bank b, EntityPlayer uuid)
 	{
+		super();
+		
 		bank	= b;
 		holder 	= uuid;
-		
-		balance = bank.getInitialBalance();
 		
 		bank.fireAccountCreationEvent(new AccountCreationEvent(bank, this));
 	}
@@ -81,10 +84,14 @@ public class BankAccount implements Serializeable{
 	}
 
 	@Override
-	public void deserialize(Configuration config, String key)
+	public BankAccount deserialize(Configuration config, String key)
 	{
+		BankAccount account = new BankAccount();
+		
 		config.get(KNEconomy.CATEGORY_ACCOUNT, key + ".balance", 0.0D).getDouble();
 		config.get(KNEconomy.CATEGORY_ACCOUNT, key + ".bank", "").getString();
+		
+		return account;
 	}
 
 }

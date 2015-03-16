@@ -61,6 +61,12 @@ public class KNEconomy {
     public void init(FMLInitializationEvent event)
     {
     	Bank.setDefaultBank(new Bank("Default"));
+    	
+    	for(String name : config.getStringList(CATEGORY_MAIN, "BankNames", new String[0], ""))
+    	{
+    		Bank b = new Bank(name);
+    	}
+    	
     	LOGGER.info("'" + NAME + "' V" + VERSION + " initializing.");
     	
     	MinecraftForge.EVENT_BUS.register(this);

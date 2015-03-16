@@ -2,7 +2,7 @@ package com.kingsnest.kneconomy;
 
 import net.minecraftforge.common.config.Configuration;
 
-public interface Serializeable {
+public interface Serializeable<T> {
 	
 	/**
 	 * Serialize this object.
@@ -17,6 +17,6 @@ public interface Serializeable {
 	 * @param	config	The configuration file.
 	 * @param	key		The property key belonging to this.
 	 * */
-	public void deserialize(Configuration config, String key);
+	public T deserialize(Configuration config, String key);
 
 }

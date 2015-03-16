@@ -16,7 +16,7 @@ import com.kingsnest.kneconomy.economy.listener.AccountCreationListener;
 import com.kingsnest.kneconomy.economy.listener.BankListener;
 import com.kingsnest.kneconomy.economy.listener.BankTransactionListener;
 
-public class Bank implements Serializeable{
+public class Bank implements Serializeable<Bank>{
 	
 	private static int TOTAL_BANKS = 0;
 	
@@ -32,7 +32,7 @@ public class Bank implements Serializeable{
 	private String 	name;
 	
 	/**The initial balance to give new bank accounts.*/
-	private int initialBalance = 100;
+	private double initialBalance = 100;
 	
 	/**Listeners for bank events*/
 	private List<BankListener> 	bankListeners;
@@ -43,11 +43,8 @@ public class Bank implements Serializeable{
 	/**Bank accounts of users currently online*/
 	protected List<BankAccount> accounts;
 	
-	public Bank(String bankName)
+	private Bank()
 	{
-		id = TOTAL_BANKS++;
-		name = bankName;
-		
 		bankListeners = new ArrayList<BankListener>(); 
 		accounts = new ArrayList<BankAccount>();
 		
@@ -60,6 +57,14 @@ public class Bank implements Serializeable{
 			BASIC_TRANSACTION_LISTENER = new BasicTransactionListener();
 		if(BASIC_CREATION_LISTENER == null)
 			BASIC_CREATION_LISTENER = new BasicCreationListener();
+	}
+	
+	public Bank(String bankName)
+	{
+		super();
+		
+		id = TOTAL_BANKS++;
+		name = bankName;
 	}
 	
 	public int getID()
@@ -82,12 +87,12 @@ public class Bank implements Serializeable{
 		name = n;
 	}
 	
-	public int getInitialBalance()
+	public double getInitialBalance()
 	{
 		return initialBalance;
 	}
 	
-	public void setInitialBalance(int balance)
+	public void setInitialBalance(double balance)
 	{
 		initialBalance = balance;
 	}
@@ -225,10 +230,14 @@ public class Bank implements Serializeable{
 	}
 
 	@Override
-	public void deserialize(Configuration config, String key)
+	public Bank deserialize(Configuration config, String key)
 	{
-		config.get(KNEconomy.CATEGORY_BANK, key + ".id", 0.0D).getDouble();
-		config.get(KNEconomy.CATEGORY_BANK, key + ".initialbalance", 0.0D).getDouble();
+		Bank bank = new Bank();
+		
+		bank.setID(config.get(KNEconomy.CATEGORY_BANK, key + ".id", 0).getInt());
+		bank.setInitialBalance(config.get(KNEconomy.CATEGORY_BANK, key + ".initialbalance", 0.0D).getDouble());
+		
+		return bank;
 	}
 	
 	/**
