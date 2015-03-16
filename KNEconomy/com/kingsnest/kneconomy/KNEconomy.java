@@ -9,6 +9,7 @@ import com.kingsnest.kneconomy.economy.BankAccount;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import cpw.mods.fml.common.Mod;
@@ -20,6 +21,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(modid = KNEconomy.MODID, version = KNEconomy.VERSION, name = KNEconomy.NAME)
 public class KNEconomy {
@@ -40,7 +42,7 @@ public class KNEconomy {
     public static ClientProxy proxy;
 
     // Config object
-    public Configuration         config       = null;
+    public Configuration config       = null;
     
     public static Logger LOGGER;
 
@@ -58,7 +60,10 @@ public class KNEconomy {
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
+    	Bank.setDefaultBank(new Bank("Default"));
     	LOGGER.info("'" + NAME + "' V" + VERSION + " initializing.");
+    	
+    	MinecraftForge.EVENT_BUS.register(this);
     }
 
     @EventHandler
@@ -74,7 +79,7 @@ public class KNEconomy {
     	event.registerServerCommand(new CommandGetBalance(this));
     }
 
-    @EventHandler
+    @SubscribeEvent
     public void entityJoinWorld(EntityJoinWorldEvent event)
     {
         if (event.entity instanceof EntityPlayer)
@@ -94,6 +99,14 @@ public class KNEconomy {
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) 
     {
+    	for(Bank bank : Bank.getBanks())
+    	{
+    		bank.serialize(config); //Save the bank
+    		
+    		for(BankAccount account : bank.getAccounts()) //Save the accounts of online peeps
+    			account.serialize(config);
+    	}
+    	
     	config.save();
     }
     

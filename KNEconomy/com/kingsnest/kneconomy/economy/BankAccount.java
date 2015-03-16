@@ -1,13 +1,13 @@
 package com.kingsnest.kneconomy.economy;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 
 import com.kingsnest.kneconomy.KNEconomy;
 import com.kingsnest.kneconomy.Serializeable;
+import com.kingsnest.kneconomy.economy.event.AccountCreationEvent;
 import com.kingsnest.kneconomy.economy.event.BankTransactionEvent;
 
 public class BankAccount implements Serializeable{
@@ -27,6 +27,8 @@ public class BankAccount implements Serializeable{
 	{
 		bank	= b;
 		holder 	= uuid;
+		
+		bank.fireAccountCreationEvent(new AccountCreationEvent(bank, this));
 	}
 	
 	public Bank getBank()
@@ -72,15 +74,15 @@ public class BankAccount implements Serializeable{
 	@Override
 	public void serialize(Configuration config)
 	{
-		config.get(KNEconomy.CATEGORY_ACCOUNT+this.getBank().getName(), this.getHolder().toString() + ".holder", false).set(this.getHolder().toString());
-		config.get(KNEconomy.CATEGORY_ACCOUNT+this.getBank().getName(), this.getHolder().toString() + ".balance", false).set(this.getBalance());
+		config.get(KNEconomy.CATEGORY_ACCOUNT+"."+this.getBank().getName(), this.getHolder().getUniqueID().toString() + ".holder", false).set(this.getHolder().getUniqueID().toString());
+		config.get(KNEconomy.CATEGORY_ACCOUNT+"."+this.getBank().getName(), this.getHolder().getUniqueID().toString() + ".balance", false).set(this.getBalance());
 	}
 
 	@Override
 	public void deserialize(HashMap<String, Object> data)
 	{
 		//this.setHolder(UUID.fromString((String)data.get("holder"))); TODO figure out how to get player from UUID
-		this.setBalance((double)data.get("balance"));
+		//this.setBalance((double)data.get("balance"));
 	}
 
 }

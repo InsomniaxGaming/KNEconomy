@@ -3,7 +3,6 @@ package com.kingsnest.kneconomy.economy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
@@ -38,21 +37,29 @@ public class Bank implements Serializeable{
 	/**Listeners for bank events*/
 	private List<BankListener> 	bankListeners;
 	
-	private static BasicTransactionListener BASIC_LISTENER;
+	private static BasicTransactionListener BASIC_TRANSACTION_LISTENER;
+	private static BasicCreationListener 	BASIC_CREATION_LISTENER;
 	
 	/**Bank accounts of users currently online*/
 	protected List<BankAccount> accounts;
 	
-	public Bank()
+	public Bank(String bankName)
 	{
 		id = TOTAL_BANKS++;
+		name = bankName;
 		
 		bankListeners = new ArrayList<BankListener>(); 
+		accounts = new ArrayList<BankAccount>();
+		
+		if(BANKS == null)
+			BANKS = new ArrayList<Bank>();
 		
 		BANKS.add(this);
 		
-		if(BASIC_LISTENER == null)
-			BASIC_LISTENER = new BasicTransactionListener();
+		if(BASIC_TRANSACTION_LISTENER == null)
+			BASIC_TRANSACTION_LISTENER = new BasicTransactionListener();
+		if(BASIC_CREATION_LISTENER == null)
+			BASIC_CREATION_LISTENER = new BasicCreationListener();
 	}
 	
 	public int getID()
@@ -85,6 +92,11 @@ public class Bank implements Serializeable{
 		initialBalance = balance;
 	}
 	
+	public static void initialize()
+	{
+		
+	}
+	
 	public static Bank getDefaultBank()
 	{
 		return DEFAULT;
@@ -98,6 +110,11 @@ public class Bank implements Serializeable{
 	public static List<Bank> getBanks()
 	{
 		return BANKS;
+	}
+	
+	public List<BankAccount> getAccounts()
+	{
+		return accounts;
 	}
 
 	public static Bank getBankFromName(String name)
@@ -183,7 +200,21 @@ public class Bank implements Serializeable{
 		}
 		
 		//Fire basic listener separately, to ensure it is the final authority.
-		BASIC_LISTENER.onTransaction(e);
+		BASIC_TRANSACTION_LISTENER.onTransaction(e);
+	}
+	
+	protected void fireAccountCreationEvent(AccountCreationEvent e)
+	{
+		for(BankListener listener : bankListeners)
+		{
+			if(listener instanceof AccountCreationListener)
+			{
+				((AccountCreationListener)listener).onAccountCreation(e);
+			}
+		}
+		
+		//Fire basic listener separately, to ensure it is the final authority.
+		BASIC_CREATION_LISTENER.onAccountCreation(e);
 	}
 
 	@Override
@@ -198,9 +229,9 @@ public class Bank implements Serializeable{
 	@Override
 	public void deserialize(HashMap<String, Object> data)
 	{
-		this.setID((int)data.get("id"));
-		this.setName((String)data.get("name"));
-		this.setInitialBalance((int)data.get("initialbalance"));
+		//this.setID((int)data.get("id"));
+		//this.setName((String)data.get("name"));
+		//this.setInitialBalance((int)data.get("initialbalance"));
 	}
 	
 	/**
@@ -239,10 +270,8 @@ public class Bank implements Serializeable{
 			{
 				e.getBank().accounts.add(e.getAccount());	 // accounts, if it isn't already in there.
 				KNEconomy.getLogger().info("Bank account created!");
-				KNEconomy.getLogger().info("Holder: " + e.getAccount().getBank().getName());
-				
-				
-				
+				KNEconomy.getLogger().info("Bank: " + e.getAccount().getBank().getName());
+				KNEconomy.getLogger().info("Holder: " + e.getAccount().getHolder().getDisplayName());
 			}
 		}
 	}
