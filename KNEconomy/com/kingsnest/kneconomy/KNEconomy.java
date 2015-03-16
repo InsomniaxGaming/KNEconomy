@@ -4,12 +4,13 @@ import org.apache.logging.log4j.Logger;
 
 import com.kingsnest.kneconomy.commands.CommandGetBalance;
 import com.kingsnest.kneconomy.commands.CommandSetBalance;
+import com.kingsnest.kneconomy.economy.Bank;
+import com.kingsnest.kneconomy.economy.BankAccount;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -41,11 +42,13 @@ public class KNEconomy {
     // Config object
     public Configuration         config       = null;
     
-    public Logger logger = FMLLog.getLogger();
+    public static Logger LOGGER;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	LOGGER = event.getModLog();
+    	
         config = new Configuration(event.getSuggestedConfigurationFile());
 
         // loading the configuration from its file
@@ -55,7 +58,7 @@ public class KNEconomy {
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-    	logger.info("'" + NAME + "' V" + VERSION + " initializing.");
+    	LOGGER.info("'" + NAME + "' V" + VERSION + " initializing.");
     }
 
     @EventHandler
@@ -78,7 +81,13 @@ public class KNEconomy {
         {
         	//Check if player has an existing bank account.
             EntityPlayer player = (EntityPlayer) event.entity;
+            BankAccount account = null;
             
+            for(Bank bank : Bank.getBanks())
+            	account = bank.getAccount(player, true);
+            
+            if(account == null)
+            	account = new BankAccount(Bank.getDefaultBank(), player);
         }
     }
 
@@ -86,6 +95,11 @@ public class KNEconomy {
     public void serverStopping(FMLServerStoppingEvent event) 
     {
     	config.save();
+    }
+    
+    public static Logger getLogger()
+    {
+    	return LOGGER;
     }
 
     public boolean isOp(EntityPlayer player) {

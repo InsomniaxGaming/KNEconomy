@@ -3,6 +3,7 @@ package com.kingsnest.kneconomy.economy;
 import java.util.HashMap;
 import java.util.UUID;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 
 import com.kingsnest.kneconomy.KNEconomy;
@@ -12,7 +13,7 @@ import com.kingsnest.kneconomy.economy.event.BankTransactionEvent;
 public class BankAccount implements Serializeable{
 	
 	private Bank bank;
-	private UUID holder;
+	private EntityPlayer holder;
 	private double balance;
 	
 	/**
@@ -22,13 +23,10 @@ public class BankAccount implements Serializeable{
 	 * @param 	b		the bank this account belongs to
 	 * @param	uuid	the UUID of the account holder
 	 * */
-	public BankAccount(Bank b, UUID uuid)
+	public BankAccount(Bank b, EntityPlayer uuid)
 	{
 		bank	= b;
 		holder 	= uuid;
-		
-		if(bank.accounts.contains(this)) // Add this account to the bank's list of 
-			bank.accounts.add(this);	 // accounts, if it isn't already in there.
 	}
 	
 	public Bank getBank()
@@ -41,14 +39,14 @@ public class BankAccount implements Serializeable{
 		bank = b; //TODO mayhaps some extra logic for when the set bank already contains this user.
 	}
 	
-	public UUID getHolder()
+	public EntityPlayer getHolder()
 	{
 		return holder;
 	}
 	
-	public void setHolder(UUID uuid)
+	public void setHolder(EntityPlayer player)
 	{
-		holder = uuid;
+		holder = player;
 	}
 	
 	public double getBalance()
@@ -81,7 +79,7 @@ public class BankAccount implements Serializeable{
 	@Override
 	public void deserialize(HashMap<String, Object> data)
 	{
-		this.setHolder(UUID.fromString((String)data.get("holder")));
+		//this.setHolder(UUID.fromString((String)data.get("holder"))); TODO figure out how to get player from UUID
 		this.setBalance((double)data.get("balance"));
 	}
 

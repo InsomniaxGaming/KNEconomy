@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 
 import com.kingsnest.kneconomy.KNEconomy;
 import com.kingsnest.kneconomy.Serializeable;
+import com.kingsnest.kneconomy.economy.event.AccountCreationEvent;
 import com.kingsnest.kneconomy.economy.event.BankEvent;
 import com.kingsnest.kneconomy.economy.event.BankTransactionEvent;
+import com.kingsnest.kneconomy.economy.listener.AccountCreationListener;
 import com.kingsnest.kneconomy.economy.listener.BankListener;
 import com.kingsnest.kneconomy.economy.listener.BankTransactionListener;
 
@@ -122,11 +125,11 @@ public class Bank implements Serializeable{
 	/**
 	 * Retrieves the account of the specified user. Only checks online users.
 	 * */
-	public BankAccount getAccount(UUID uuid)
+	public BankAccount getAccount(EntityPlayer player)
 	{
 		for(BankAccount account : accounts)
 		{
-			if(account.getHolder() == uuid)
+			if(account.getHolder() == player)
 				return account;
 		}
 		return null;
@@ -136,12 +139,12 @@ public class Bank implements Serializeable{
 	 * Retrieves the bank account of the specified user, if one exists.
 	 * if offlineOnly is false, it will first check getAccount(uuid).
 	 * */
-	public BankAccount getAccount(UUID uuid, boolean offlineOnly)
+	public BankAccount getAccount(EntityPlayer player, boolean offlineOnly)
 	{
 		BankAccount account = null;
 		
 		if(!offlineOnly)
-			account = getAccount(uuid);
+			account = getAccount(player);
 		
 		if(account == null)
 		{
@@ -220,6 +223,26 @@ public class Bank implements Serializeable{
 					//Deposit
 					e.getBankAccount().setBalance(e.getBankAccount().getBalance()+e.getTransaction());
 				}
+			}
+		}
+	}
+	
+	/**
+	 * The final decision maker on whether to allow a transaction, and also an example of the event system.
+	 * */
+	final class BasicCreationListener implements AccountCreationListener
+	{
+		@Override
+		public void onAccountCreation(AccountCreationEvent e)
+		{
+			if(!e.isCancelled())
+			{
+				e.getBank().accounts.add(e.getAccount());	 // accounts, if it isn't already in there.
+				KNEconomy.getLogger().info("Bank account created!");
+				KNEconomy.getLogger().info("Holder: " + e.getAccount().getBank().getName());
+				
+				
+				
 			}
 		}
 	}

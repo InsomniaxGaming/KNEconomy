@@ -81,7 +81,7 @@ public class CommandGetBalance implements ICommand{
 		}
 		else
 		{
-			myMod.logger.info(message);
+			myMod.LOGGER.info(message);
 		}
 	}
 
