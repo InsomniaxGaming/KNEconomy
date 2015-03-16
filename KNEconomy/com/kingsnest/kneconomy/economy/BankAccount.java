@@ -14,10 +14,8 @@ public class BankAccount implements Serializeable<BankAccount>{
 	private EntityPlayer holder;
 	private double balance;
 	
-	private BankAccount()
-	{	
-		balance = bank.getInitialBalance();
-	}
+	/**Empty constructor for deserialization.*/
+	public BankAccount(){}
 	
 	/**
 	 * Retrieve existing bank account if specified uuid correlates to one,
@@ -28,10 +26,10 @@ public class BankAccount implements Serializeable<BankAccount>{
 	 * */
 	public BankAccount(Bank b, EntityPlayer uuid)
 	{
-		super();
-		
 		bank	= b;
 		holder 	= uuid;
+		
+		balance = bank.getInitialBalance();
 		
 		bank.fireAccountCreationEvent(new AccountCreationEvent(bank, this));
 	}

@@ -42,8 +42,9 @@ public class KNEconomy {
     public static ClientProxy proxy;
 
     // Config object
-    public Configuration config       = null;
+    public static Configuration CONFIGURATION	= null;
     
+    // Logger, for logging
     public static Logger LOGGER;
 
     @EventHandler
@@ -51,10 +52,10 @@ public class KNEconomy {
     {
     	LOGGER = event.getModLog();
     	
-        config = new Configuration(event.getSuggestedConfigurationFile());
+        CONFIGURATION = new Configuration(event.getSuggestedConfigurationFile());
 
         // loading the configuration from its file
-        config.load();
+        CONFIGURATION.load();
     }
     
     @EventHandler
@@ -62,10 +63,8 @@ public class KNEconomy {
     {
     	Bank.setDefaultBank(new Bank("Default"));
     	
-    	for(String name : config.getStringList(CATEGORY_MAIN, "BankNames", new String[0], ""))
-    	{
-    		Bank b = new Bank(name);
-    	}
+    	for(String name : CONFIGURATION.getStringList(CATEGORY_MAIN, "BankNames", new String[0], ""))
+    		Bank.getBanks().add(Bank.getDefaultBank().deserialize(CONFIGURATION, name));
     	
     	LOGGER.info("'" + NAME + "' V" + VERSION + " initializing.");
     	
@@ -110,18 +109,18 @@ public class KNEconomy {
     	
     	for(Bank bank : Bank.getBanks())
     	{
-    		bank.serialize(config); //Save the bank
+    		bank.serialize(CONFIGURATION); //Save the bank
     		
     		bankNames[nameIndex] = bank.getName();
     		nameIndex++;
     		
     		for(BankAccount account : bank.getAccounts()) //Save the accounts of online peeps
-    			account.serialize(config);
+    			account.serialize(CONFIGURATION);
     	}
     	
-    	config.get(KNEconomy.CATEGORY_MAIN, "BankNames", bankNames).set(bankNames);
+    	CONFIGURATION.get(KNEconomy.CATEGORY_MAIN, "BankNames", bankNames).set(bankNames);
     	
-    	config.save();
+    	CONFIGURATION.save();
     }
     
     public static Logger getLogger()

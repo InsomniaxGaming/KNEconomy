@@ -57,13 +57,15 @@ public class Bank implements Serializeable<Bank>{
 			BASIC_TRANSACTION_LISTENER = new BasicTransactionListener();
 		if(BASIC_CREATION_LISTENER == null)
 			BASIC_CREATION_LISTENER = new BasicCreationListener();
+		
+		TOTAL_BANKS++;
 	}
 	
 	public Bank(String bankName)
 	{
 		super();
 		
-		id = TOTAL_BANKS++;
+		id = TOTAL_BANKS;
 		name = bankName;
 	}
 	
@@ -170,7 +172,8 @@ public class Bank implements Serializeable<Bank>{
 		
 		if(account == null)
 		{
-			//TODO check config for account.
+			account = new BankAccount();
+			account = account.deserialize(KNEconomy.CONFIGURATION, player.getPersistentID().toString());
 		}
 		
 		return account;
