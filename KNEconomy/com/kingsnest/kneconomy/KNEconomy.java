@@ -1,5 +1,8 @@
 package com.kingsnest.kneconomy;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.apache.logging.log4j.Logger;
 
 import com.kingsnest.kneconomy.commands.CommandGetBalance;
@@ -97,7 +100,7 @@ public class KNEconomy {
             	account = bank.getAccount(player, true);
             
             if(account == null)
-            	account = new BankAccount(Bank.getDefaultBank(), player);
+            	account = new BankAccount(Bank.getDefaultBank(), player.getPersistentID());
         }
     }
 
@@ -126,6 +129,17 @@ public class KNEconomy {
     public static Logger getLogger()
     {
     	return LOGGER;
+    }
+    
+    public static EntityPlayer getPlayer(UUID uuid)
+    {
+    	for(EntityPlayer player : (List<EntityPlayer>)MinecraftServer.getServer().getConfigurationManager().playerEntityList)
+    	{
+    		if(player.getPersistentID() == uuid)
+    			return player;
+    	}
+    	
+    	return null;
     }
 
     public boolean isOp(EntityPlayer player) {

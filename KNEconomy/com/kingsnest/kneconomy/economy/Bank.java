@@ -3,6 +3,7 @@ package com.kingsnest.kneconomy.economy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
@@ -149,7 +150,7 @@ public class Bank implements Serializeable<Bank>{
 	/**
 	 * Retrieves the account of the specified user. Only checks online users.
 	 * */
-	public BankAccount getAccount(EntityPlayer player)
+	public BankAccount getAccount(UUID player)
 	{
 		for(BankAccount account : accounts)
 		{
@@ -168,7 +169,7 @@ public class Bank implements Serializeable<Bank>{
 		BankAccount account = null;
 		
 		if(!offlineOnly)
-			account = getAccount(player);
+			account = getAccount(player.getPersistentID());
 		
 		if(account == null)
 		{
@@ -280,7 +281,7 @@ public class Bank implements Serializeable<Bank>{
 				e.getBank().accounts.add(e.getAccount());	 // accounts, if it isn't already in there.
 				KNEconomy.getLogger().info("Bank account created!");
 				KNEconomy.getLogger().info("Bank: " + e.getAccount().getBank().getName());
-				KNEconomy.getLogger().info("Holder: " + e.getAccount().getHolder().getDisplayName());
+				KNEconomy.getLogger().info("Holder: " + KNEconomy.getPlayer(e.getAccount().getHolder()).getDisplayName());
 			}
 		}
 	}

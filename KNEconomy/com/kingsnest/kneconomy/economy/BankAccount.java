@@ -1,5 +1,7 @@
 package com.kingsnest.kneconomy.economy;
 
+import java.util.UUID;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.config.Configuration;
 
@@ -11,7 +13,7 @@ import com.kingsnest.kneconomy.economy.event.BankTransactionEvent;
 public class BankAccount implements Serializeable<BankAccount>{
 	
 	private Bank bank;
-	private EntityPlayer holder;
+	private UUID holder;
 	private double balance;
 	
 	/**Empty constructor for deserialization.*/
@@ -24,7 +26,7 @@ public class BankAccount implements Serializeable<BankAccount>{
 	 * @param 	b		the bank this account belongs to
 	 * @param	uuid	the UUID of the account holder
 	 * */
-	public BankAccount(Bank b, EntityPlayer uuid)
+	public BankAccount(Bank b, UUID uuid)
 	{
 		bank	= b;
 		holder 	= uuid;
@@ -44,12 +46,12 @@ public class BankAccount implements Serializeable<BankAccount>{
 		bank = b; //TODO mayhaps some extra logic for when the set bank already contains this user.
 	}
 	
-	public EntityPlayer getHolder()
+	public UUID getHolder()
 	{
 		return holder;
 	}
 	
-	public void setHolder(EntityPlayer player)
+	public void setHolder(UUID player)
 	{
 		holder = player;
 	}
@@ -77,8 +79,8 @@ public class BankAccount implements Serializeable<BankAccount>{
 	@Override
 	public void serialize(Configuration config)
 	{
-		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().getPersistentID().toString() + ".balance", 0.0D).set(this.getBalance());
-		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().getPersistentID().toString() + ".bank", "").set(this.getBank().getName());
+		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().toString() + ".balance", 0.0D).set(this.getBalance());
+		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().toString() + ".bank", "").set(this.getBank().getName());
 	}
 
 	@Override
