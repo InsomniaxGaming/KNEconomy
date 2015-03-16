@@ -1,18 +1,22 @@
 package com.kingsnest.kneconomy;
 
-import java.util.HashMap;
-
 import net.minecraftforge.common.config.Configuration;
 
 public interface Serializeable {
 	
+	/**
+	 * Serialize this object.
+	 * 
+	 * @param	config	The configuration file.
+	 * */
 	public void serialize(Configuration config);
 	
 	/**
 	 * De-serialize this object.
 	 * 
-	 * @param	data	A map of keys to their values in the config.
+	 * @param	config	The configuration file.
+	 * @param	key		The property key belonging to this.
 	 * */
-	public void deserialize(HashMap<String, Object> data);
+	public void deserialize(Configuration config, String key);
 
 }

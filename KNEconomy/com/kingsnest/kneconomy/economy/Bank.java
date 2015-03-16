@@ -222,16 +222,13 @@ public class Bank implements Serializeable{
 	{
 		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".id", false).set(this.getID());
 		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".initialbalance", false).set(this.getInitialBalance());
-		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".name", false).set(this.getName());
-		
 	}
 
 	@Override
-	public void deserialize(HashMap<String, Object> data)
+	public void deserialize(Configuration config, String key)
 	{
-		//this.setID((int)data.get("id"));
-		//this.setName((String)data.get("name"));
-		//this.setInitialBalance((int)data.get("initialbalance"));
+		config.get(KNEconomy.CATEGORY_BANK, key + ".id", false);
+		config.get(KNEconomy.CATEGORY_BANK, key + ".initialbalance", false);
 	}
 	
 	/**

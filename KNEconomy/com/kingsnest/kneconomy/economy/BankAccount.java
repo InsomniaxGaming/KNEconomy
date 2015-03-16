@@ -76,15 +76,15 @@ public class BankAccount implements Serializeable{
 	@Override
 	public void serialize(Configuration config)
 	{
-		config.get(KNEconomy.CATEGORY_ACCOUNT+"."+this.getBank().getName(), this.getHolder().getPersistentID().toString() + ".holder", false).set(this.getHolder().getPersistentID().toString());
-		config.get(KNEconomy.CATEGORY_ACCOUNT+"."+this.getBank().getName(), this.getHolder().getPersistentID().toString() + ".balance", false).set(this.getBalance());
+		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().getPersistentID().toString() + ".balance", false).set(this.getBalance());
+		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().getPersistentID().toString() + ".bank", false).set(this.getBank().getName());
 	}
 
 	@Override
-	public void deserialize(HashMap<String, Object> data)
+	public void deserialize(Configuration config, String key)
 	{
-		//this.setHolder(UUID.fromString((String)data.get("holder"))); TODO figure out how to get player from UUID
-		//this.setBalance((double)data.get("balance"));
+		config.get(KNEconomy.CATEGORY_ACCOUNT, key + ".balance", false);
+		config.get(KNEconomy.CATEGORY_ACCOUNT, key + ".bank", false);
 	}
 
 }

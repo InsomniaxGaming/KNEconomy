@@ -99,13 +99,21 @@ public class KNEconomy {
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent event) 
     {
+    	String[] bankNames = new String[Bank.getBanks().size()];
+    	int nameIndex = 0;
+    	
     	for(Bank bank : Bank.getBanks())
     	{
     		bank.serialize(config); //Save the bank
     		
+    		bankNames[nameIndex] = bank.getName();
+    		nameIndex++;
+    		
     		for(BankAccount account : bank.getAccounts()) //Save the accounts of online peeps
     			account.serialize(config);
     	}
+    	
+    	config.get(KNEconomy.CATEGORY_MAIN, "BankNames", false).set(bankNames);
     	
     	config.save();
     }
