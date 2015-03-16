@@ -76,15 +76,15 @@ public class BankAccount implements Serializeable{
 	@Override
 	public void serialize(Configuration config)
 	{
-		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().getPersistentID().toString() + ".balance", false).set(this.getBalance());
-		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().getPersistentID().toString() + ".bank", false).set(this.getBank().getName());
+		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().getPersistentID().toString() + ".balance", 0.0D).set(this.getBalance());
+		config.get(KNEconomy.CATEGORY_ACCOUNT, this.getHolder().getPersistentID().toString() + ".bank", "").set(this.getBank().getName());
 	}
 
 	@Override
 	public void deserialize(Configuration config, String key)
 	{
-		config.get(KNEconomy.CATEGORY_ACCOUNT, key + ".balance", false);
-		config.get(KNEconomy.CATEGORY_ACCOUNT, key + ".bank", false);
+		config.get(KNEconomy.CATEGORY_ACCOUNT, key + ".balance", 0.0D).getDouble();
+		config.get(KNEconomy.CATEGORY_ACCOUNT, key + ".bank", "").getString();
 	}
 
 }

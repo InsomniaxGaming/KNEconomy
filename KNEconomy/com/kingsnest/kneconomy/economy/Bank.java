@@ -220,15 +220,15 @@ public class Bank implements Serializeable{
 	@Override
 	public void serialize(Configuration config)
 	{
-		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".id", false).set(this.getID());
-		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".initialbalance", false).set(this.getInitialBalance());
+		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".id", 0.0D).set(this.getID());
+		config.get(KNEconomy.CATEGORY_BANK, this.getName() + ".initialbalance", 0.0D).set(this.getInitialBalance());
 	}
 
 	@Override
 	public void deserialize(Configuration config, String key)
 	{
-		config.get(KNEconomy.CATEGORY_BANK, key + ".id", false);
-		config.get(KNEconomy.CATEGORY_BANK, key + ".initialbalance", false);
+		config.get(KNEconomy.CATEGORY_BANK, key + ".id", 0.0D).getDouble();
+		config.get(KNEconomy.CATEGORY_BANK, key + ".initialbalance", 0.0D).getDouble();
 	}
 	
 	/**

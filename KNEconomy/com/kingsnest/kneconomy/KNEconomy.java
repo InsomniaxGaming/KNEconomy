@@ -113,7 +113,7 @@ public class KNEconomy {
     			account.serialize(config);
     	}
     	
-    	config.get(KNEconomy.CATEGORY_MAIN, "BankNames", false).set(bankNames);
+    	config.get(KNEconomy.CATEGORY_MAIN, "BankNames", bankNames).set(bankNames);
     	
     	config.save();
     }

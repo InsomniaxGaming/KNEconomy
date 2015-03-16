@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kingsnest.kneconomy.KNEconomy;
+import com.kingsnest.kneconomy.economy.Bank;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -71,6 +72,7 @@ public class CommandGetBalance implements ICommand{
 		else 
 		{
 			//TODO get balance of commandsender in default bank.
+			message = "Balance: " + Bank.getDefaultBank().getAccount((EntityPlayer)commandSender).getBalance();
 		}
 		
 		if(commandSender instanceof EntityPlayer)
